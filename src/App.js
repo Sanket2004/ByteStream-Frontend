@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DownloadPage from './Components/DownloadPage';
 import UploadedFilesPage from './Components/UploadedFilesPage';
 import OnboardingPage from './Components/OnboardingPage';
+import ErrorPage from './Components/ErrorPage';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path='/file/:id' element={<DownloadPage />} />
         
         <Route path='/files' element={<UploadedFilesPage />} />
+
+        <Route path='*' element={<ErrorPage />} />
 
       </Routes>
     </BrowserRouter>
