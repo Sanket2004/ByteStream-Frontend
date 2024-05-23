@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { LiaDownloadSolid } from "react-icons/lia";
 import {
   RiFile2Line,
   RiFileExcel2Line,
@@ -73,9 +74,13 @@ function UploadedFilesPage() {
         </div>
         <div className="mx-auto max-w-screen-xl pt-8 px-4 md:px-6">
           {loading ? (
-            <p className="text-slate-600 dark:text-slate-400 text-center">Loading files...</p>
+            <p className="text-slate-600 dark:text-slate-400 text-center">
+              Loading files...
+            </p>
           ) : files.length === 0 ? (
-            <p className="text-slate-600 dark:text-slate-400 text-center">No files uploaded yet.</p>
+            <p className="text-slate-600 dark:text-slate-400 text-center">
+              No files uploaded yet.
+            </p>
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2 items-center">
               {files.map((file) => (
@@ -90,14 +95,22 @@ function UploadedFilesPage() {
                     </p>
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-4xl">
-                        <span>{getFileIcon(file.originalName.split(".").pop())}</span>
+                        <span>
+                          {getFileIcon(file.originalName.split(".").pop())}
+                        </span>
                       </div>
                     </div>
-                    <div className="bottom-2 border-t-2 w-full border-slate-200 dark:border-slate-700">
-                      <p className="text-[10px] truncate">{file.createdBy}</p>
-                      <p className="text-[8px] truncate">
-                        {new Date(file.createdAt).toLocaleString()}
-                      </p>
+                    <div className="border-t-2 w-full border-slate-200 dark:border-slate-700 flex flex-row items-center justify-between">
+                      <div className="truncate max-w-22">
+                        <p className="text-[10px] truncate">{file.createdBy}</p>
+                        <p className="text-[8px] truncate">
+                          {new Date(file.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <p className="text-[10px] truncate">{file.downloads}</p>
+                        <p className="text-[10px] truncate"><LiaDownloadSolid /></p>
+                      </div>
                     </div>
                   </div>
                 </li>
