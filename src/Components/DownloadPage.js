@@ -20,26 +20,30 @@ const FileDownload = () => {
         `${process.env.REACT_APP_BACKEND_URL}/file/${id}`
       );
       setFileInfo(response.data);
-      if (!response.data.passwordProtected) {
-        // If file is not password protected, make a POST request
+      // if (!response.data.passwordProtected) {
+      //   // If file is not password protected, make a POST request
 
-        console.log(response.data.passwordProtected);
+      //   console.log(response.data.passwordProtected);
 
-        const postResponse = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/file/${id}`
-        );
-        // Assuming 'initiateDownload' function is asynchronous, wait for it to complete
-        await initiateDownload(
-          postResponse.data.path,
-          response.data.originalName
-        );
-      }
+      //   const postResponse = await axios.post(
+      //     `${process.env.REACT_APP_BACKEND_URL}/file/${id}`
+      //   );
+      //   // Assuming 'initiateDownload' function is asynchronous, wait for it to complete
+      //   await initiateDownload(
+      //     postResponse.data.path,
+      //     response.data.originalName
+      //   );
+      // }
     } catch (err) {
       setError("Failed to fetch file information.");
     } finally {
       setLoading(false);
     }
   };
+
+  useState(() => {
+    fetchFileInfo();
+  });
 
   const handlePasswordSubmit = async () => {
     setLoading(true);
@@ -56,7 +60,7 @@ const FileDownload = () => {
       const fileName = fileInfo.originalName;
 
       initiateDownload(response.data.path, fileName);
-      setPassword('')
+      setPassword("");
     } catch (err) {
       if (err.response && err.response.status === 403) {
         setError("Incorrect password.");
@@ -71,7 +75,6 @@ const FileDownload = () => {
   };
 
   const initiateDownload = async (url, originalName) => {
-
     if (!url) {
       setError("Invalid download URL");
       return;
@@ -105,8 +108,14 @@ const FileDownload = () => {
       <Navbar />
       <section className="dark:bg-slate-900 min-h-screen ">
         <div className="flex flex-col items-center justify-center h-screen">
-          <div className="mx-auto max-w-screen-md text-center px-4">
-            <h1 className="text-2xl font-bold sm:text-3xl text-slate-700 dark:text-slate-300 ">
+          <div className="mx-auto max-w-md text-center px-4">
+            {fileInfo && (
+              <h1 className="text-lg text-slate-500 dark:text-slate-200 mb-4">
+                {fileInfo.originalName}
+              </h1>
+            )}
+
+            <h1 className="text-xl font-bold sm:text-2xl text-slate-700 dark:text-slate-300">
               Download shared file
             </h1>
             <p className="mt-4 text-base text-slate-500 dark:text-slate-600 ">
@@ -114,23 +123,19 @@ const FileDownload = () => {
               download it directly.
             </p>
           </div>
-          <div className="mx-auto max-w-screen-xl text-center">
+          <div className="mx-auto text-center w-full">
             <div className="mx-auto px-6 py-8 sm:px-6 lg:px-8 gap-16 items-center">
-              <div className="flex flex-col items-center gap-2 max-w-md mx-auto">
-                <button
+              <div className="flex flex-col items-center gap-2 max-w-md mx-auto w-full">
+                {/* <button
                   onClick={fetchFileInfo}
                   disabled={loading}
                   className="inline-block rounded-xl bg-slate-700 py-2 px-4 text-base font-medium text-white transition-all hover:bg-slate-800  focus:outline-none focus:ring ring-slate-400"
                 >
                   {loading ? "Loading..." : "Download File"}
-                </button>
-                {fileInfo && (
-                  <p className="text-base text-slate-500 dark:text-slate-200 ">
-                    {fileInfo.originalName}
-                  </p>
-                )}
+                </button> */}
+
                 {fileInfo && fileInfo.passwordProtected && (
-                  <div className="flex flex-col gap-4 w-full">
+                  <div className="mb-4 w-full">
                     <input
                       type="password"
                       placeholder="Enter password"
@@ -139,15 +144,15 @@ const FileDownload = () => {
                       disabled={loading}
                       className="w-full rounded-xl px-4 mt-1 py-3 pe-12 text-base bg-slate-100 dark:bg-slate-950 focus:ring-1 ring-slate-400 focus:outline-none dark:text-slate-200 text-slate-700"
                     />
-                    <button
-                      onClick={handlePasswordSubmit}
-                      disabled={loading}
-                      className="inline-block rounded-xl bg-slate-700 px-5 py-2 text-base font-medium text-white transition-all hover:bg-slate-800  focus:outline-none focus:ring ring-slate-400"
-                    >
-                      {loading ? "Loading..." : "Submit"}
-                    </button>
                   </div>
                 )}
+                <button
+                  onClick={handlePasswordSubmit}
+                  disabled={loading}
+                  className="inline-block rounded-xl bg-slate-700 px-5 py-2 text-base font-medium text-white transition-all hover:bg-slate-800  focus:outline-none focus:ring ring-slate-400"
+                >
+                  {loading ? "Loading..." : "Download"}
+                </button>
                 {error && <p style={{ color: "red" }}>{error}</p>}
               </div>
             </div>
