@@ -108,9 +108,9 @@ const FileDownload = () => {
       <Navbar />
       <section className="dark:bg-slate-900 min-h-screen ">
         <div className="flex flex-col items-center justify-center h-screen">
-          <div className="mx-auto max-w-md text-center px-4">
+          <div className="mx-auto max-w-md text-center px-4 text-wrap break-word">
             {fileInfo && (
-              <h1 className="text-lg text-slate-500 dark:text-slate-200 mb-4">
+              <h1 className="text-lg text-slate-500 dark:text-slate-200 mb-4 break-all">
                 {fileInfo.originalName}
               </h1>
             )}
@@ -118,7 +118,7 @@ const FileDownload = () => {
             <h1 className="text-xl font-bold sm:text-2xl text-slate-700 dark:text-slate-300">
               Download shared file
             </h1>
-            <p className="mt-4 text-base text-slate-500 dark:text-slate-600 ">
+            <p className="mt-4 text-base text-slate-500 dark:text-slate-600 break-word">
               Download the file with password and if password not required then
               download it directly.
             </p>
