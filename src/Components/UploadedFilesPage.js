@@ -44,6 +44,7 @@ function getFileIcon(extension) {
 function UploadedFilesPage() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +64,12 @@ function UploadedFilesPage() {
     fetchFiles();
   }, []);
 
+  const filteredFiles = files.filter(
+    (file) =>
+      file.originalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      file.createdBy.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <Navbar />
@@ -71,19 +78,26 @@ function UploadedFilesPage() {
           <h1 className="text-2xl font-bold sm:text-3xl text-slate-700 dark:text-slate-300">
             All shared files
           </h1>
+          <input
+            type="text"
+            placeholder="Search files..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="mt-4 p-2 px-4 w-full max-w-screen-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 rounded-full focus:outline-none dark:focus:border-slate-500 text-slate-500 dark:text-slate-200"
+          />
         </div>
         <div className="mx-auto max-w-screen-xl pt-8 px-4 md:px-6">
           {loading ? (
             <p className="text-slate-600 dark:text-slate-400 text-center">
               Loading files...
             </p>
-          ) : files.length === 0 ? (
+          ) : filteredFiles.length === 0 ? (
             <p className="text-slate-600 dark:text-slate-400 text-center">
               No files uploaded yet.
             </p>
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2 items-center">
-              {files.map((file) => (
+              {filteredFiles.map((file) => (
                 <li
                   key={file._id}
                   onClick={() => navigate(`/file/${file._id}`)}
