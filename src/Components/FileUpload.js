@@ -39,6 +39,7 @@ const FileUpload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("createdBy", userName);
+    formData.append("email", email);
     if (password) formData.append("password", password);
 
     try {
