@@ -87,7 +87,7 @@ function UploadedFilesPage() {
             className="mt-4 p-2 px-4 w-full max-w-screen-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 rounded-full focus:outline-none dark:focus:border-slate-500 text-slate-500 dark:text-slate-200"
           />
         </div>
-        <div className="mx-auto max-w-screen-xl pt-8 px-4 md:px-6">
+        <div className="mx-auto max-w-screen-xl py-8 px-4 md:px-6">
           {loading ? (
             <p className="text-slate-600 dark:text-slate-400 text-center">
               Loading files...
