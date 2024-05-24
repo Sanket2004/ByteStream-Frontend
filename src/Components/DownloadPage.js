@@ -16,10 +16,23 @@ const FileDownload = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/file/${id}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/file/${id}`
+      );
       setFileInfo(response.data);
       if (!response.data.passwordProtected) {
-        initiateDownload(response.data.fileUrl);
+        // If file is not password protected, make a POST request
+
+        console.log(response.data.passwordProtected);
+
+        const postResponse = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/file/${id}`
+        );
+        // Assuming 'initiateDownload' function is asynchronous, wait for it to complete
+        await initiateDownload(
+          postResponse.data.path,
+          response.data.originalName
+        );
       }
     } catch (err) {
       setError("Failed to fetch file information.");
@@ -32,10 +45,18 @@ const FileDownload = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/file/${id}`, {
-        password,
-      });
-      initiateDownload(response.data.path);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/file/${id}`,
+        {
+          password,
+        }
+      );
+
+      // Update the file name if provided by the backend
+      const fileName = fileInfo.originalName;
+
+      initiateDownload(response.data.path, fileName);
+      setPassword('')
     } catch (err) {
       if (err.response && err.response.status === 403) {
         setError("Incorrect password.");
@@ -49,7 +70,13 @@ const FileDownload = () => {
     }
   };
 
-  const initiateDownload = async (url) => {
+  const initiateDownload = async (url, originalName) => {
+
+    if (!url) {
+      setError("Invalid download URL");
+      return;
+    }
+
     try {
       const response = await axios.get(url, { responseType: "blob" });
       const blob = new Blob([response.data], {
@@ -59,7 +86,7 @@ const FileDownload = () => {
 
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = fileInfo.originalName; // Set the filename for download
+      link.download = originalName; // Set the filename for download
       link.style.display = "none";
       document.body.appendChild(link);
       link.click();
