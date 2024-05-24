@@ -83,6 +83,7 @@ function UploadedFilesPage() {
             placeholder="Search files..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            readOnly={loading}
             className="mt-4 p-2 px-4 w-full max-w-screen-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 rounded-full focus:outline-none dark:focus:border-slate-500 text-slate-500 dark:text-slate-200"
           />
         </div>
@@ -123,7 +124,9 @@ function UploadedFilesPage() {
                       </div>
                       <div className="flex flex-col items-center">
                         <p className="text-[10px] truncate">{file.downloads}</p>
-                        <p className="text-[10px] truncate"><LiaDownloadSolid /></p>
+                        <p className="text-[10px] truncate">
+                          <LiaDownloadSolid />
+                        </p>
                       </div>
                     </div>
                   </div>
